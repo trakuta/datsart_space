@@ -12,7 +12,8 @@ def get_next_level_info():
     url = 'http://api.datsart.dats.team/art/stage/next'
     headers = {
             "Authorization": f"Bearer {token}",
-            "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"
+            "Content-Type": 'multipart/form-data; boundary='
+            '----WebKitFormBoundary7MA4YWxkTrZu0gW'
         }
     ans = requests.post(url, headers=headers)
     if ans.status_code == 200:
@@ -30,7 +31,8 @@ def start_next_level(imageId):
     headers = {
             "Authorization": f"Bearer {token}",
             "Content-Length": '',
-            "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"
+            "Content-Type": 'multipart/form-data; boundary='
+            '----WebKitFormBoundary7MA4YWxkTrZu0gW'
         }
     data = {'imageId': imageId}
     body = (f'------WebKitFormBoundary7MA4YWxkTrZu0gW\r\n'
@@ -38,7 +40,7 @@ def start_next_level(imageId):
         f'\r\n{imageId}\r\n'
         f'------WebKitFormBoundary7MA4YWxkTrZu0gW--\r\n')
     headers['Content-Length'] = str(len(body))
-    ans = requests.post(url, headers=headers)
+    ans = requests.post(url, headers=headers, data=body)
     if ans.status_code == 200:
         ans = json.loads(ans.text)
     return ans
@@ -57,7 +59,7 @@ def get_current_level_info():
         }
     body = '----WebKitFormBoundary7MA4YWxkTrZu0gW\r\n'
     headers['Content-Length'] = str(len(body))
-    ans = requests.post(url, headers=headers)
+    ans = requests.post(url, headers=headers, data=body)
     if ans.status_code == 200:
         ans = json.loads(ans.text)
     return ans
@@ -72,15 +74,12 @@ def finish_current_level():
     headers = {
             "Authorization": f"Bearer {token}",
             'Content-Length': '',
-            "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"
+            "Content-Type": "multipart/form-data; boundary="
+            "----WebKitFormBoundary7MA4YWxkTrZu0gW"
         }
     body = '----WebKitFormBoundary7MA4YWxkTrZu0gW\r\n'
     headers['Content-Length'] = str(len(body))
-    ans = requests.post(url, headers=headers)
+    ans = requests.post(url, headers=headers, data=body)
     if ans.status_code == 200:
         ans = json.loads(ans.text)
     return ans
-
-
-
-print(get_current_level_info())
