@@ -40,7 +40,6 @@ def search_paint(target: int, colors: list):
         if dist < min_dist:
             cur_color = color
             min_dist = dist
-    print(dist)
     return cur_color
 
 

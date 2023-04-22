@@ -22,6 +22,7 @@ def shoot(power: str, colors: dict, angleHorizontal=0, angleVertical=45):
             '------WebKitFormBoundary7MA4YWxkTrZu0gW\r\n'
             'Content-Disposition: form-data; name="power"\r\n'
             f'\r\n{power}\r\n'
+            '------WebKitFormBoundary7MA4YWxkTrZu0gW\r\n'
             )
     body_colors = []
     for color in colors:
@@ -29,9 +30,11 @@ def shoot(power: str, colors: dict, angleHorizontal=0, angleVertical=45):
             f'\r\n{colors[color]}\r\n'
             '------WebKitFormBoundary7MA4YWxkTrZu0gW\r\n'
         )
+        body_colors.append(s)
     body = f"{body}{''.join(body_colors)}"
 
     headers['Content-Length'] = str(len(body))
+    print(body)
     ans = requests.post(url, headers=headers, data=body)
     if ans.status_code == 200:
         ans = json.loads(ans.text)

@@ -7,7 +7,7 @@ def main():
     print(get_depot_info())
     # print(get_pixel_matrix('images/1.jpg'))
     # print(hex(get_missing_color(0xd8873f, 0, 0)))
-    print(mix_paints(0x94D778))
+    mix_paints(0x94D778)
 
 if __name__ == '__main__':
     main()
