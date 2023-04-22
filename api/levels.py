@@ -84,4 +84,6 @@ def finish_current_level():
         ans = json.loads(ans.text)
     return ans
 
-print(get_current_level_info())
+
+if __name__ == '__main__':
+    print(get_current_level_info())

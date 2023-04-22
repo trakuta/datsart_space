@@ -1,4 +1,4 @@
-from api.levels import get_next_level_info, start_next_level, get_current_level_info
+from api.levels import get_next_level_info, start_next_level, get_current_level_info, finish_current_level
 from api.catapult import shoot
 from ballista.utils import horizontal_angl
 from ballista.aim import ballista_velocity, ballista_power
@@ -31,19 +31,42 @@ def turret(image_path):
     for x in range(0, X // 2, 5):
         for y in range(0,  Y // 2):
             if targets[x][y] != 0xffffff:
-                make_shoot(turret_cord, (x, y), 
+                make_shoot(turret_cord, (x, y),
                            targets[x][y])
+                make_shoot(turret_cord, (x + 1, y),
+                           targets[x + 1][y])
+                make_shoot(turret_cord, (x + 2, y),
+                           targets[x + 2][y])
+
                 make_shoot(turret_cord, (x + X // 2, y),
                            targets[x + X // 2][y])
+                make_shoot(turret_cord, (x + 1 + X // 2, y),
+                           targets[x + 1 + X // 2][y])
+                make_shoot(turret_cord, (x + 1 + X // 2, y),
+                           targets[x + 2 + X // 2][y])
+
                 make_shoot(turret_cord, (x, y + Y // 2),
                            targets[x][y + Y // 2])
+                make_shoot(turret_cord, (x + 1, y + Y // 2),
+                           targets[x + 1][y + Y // 2])
+                make_shoot(turret_cord, (x + 2, y + Y // 2),
+                           targets[x + 2][y + Y // 2])
+
+
                 make_shoot(turret_cord, (x + X // 2, y + Y),
                            targets[x + X // 2][y + Y // 2])
-
+                make_shoot(turret_cord, (x + 1 + X // 2, y + Y),
+                           targets[x + 1 + X // 2][y + Y // 2])
+                make_shoot(turret_cord, (x + 2 + X // 2, y + Y),
+                           targets[x + 2 + X // 2][y + Y // 2])
 
 def main():
-    turret('images/1.jpg')
-    # make_shoot((124, -300), (50, 190), 0xE6B43E)
+    turret('images/6.png')
+    #finish_current_level()
+    #print(get_next_level_info())
+    #print(get_current_level_info())
+    #start_next_level(6)
+    #make_shoot((124, -300), (50, 190), 0xE6B43E)
 
 
 if __name__ == '__main__':
