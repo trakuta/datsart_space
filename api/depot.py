@@ -59,5 +59,3 @@ def get_all_paints_remains_list():
     if ans.status_code == 200:
         ans = json.loads(ans.text)
     return ans
-
-print(get_depot_info())
