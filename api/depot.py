@@ -59,3 +59,7 @@ def get_all_paints_remains_list():
     if ans.status_code == 200:
         ans = json.loads(ans.text)
     return ans
+
+
+if __name__ == '__main__':
+    print(get_all_paints_remains_list())
