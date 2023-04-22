@@ -8,7 +8,7 @@ from ballista.utils import calc_dist
 def fire(p1, p2):
     dist = calc_dist(p1, p2)
     velocity = ballista_velocity(dist)
-    return velocity
+    return int(velocity)
 
 
 def main():
