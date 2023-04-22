@@ -10,7 +10,7 @@ from picture.picture import get_pixel_matrix
 def fire(p1, p2, m):
     dist = calc_dist(p1, p2)
     v = ballista_velocity(dist)
-    p = m * v ** 2 / 2
+    p = (m * v ** 2) / 2
     return int(p)
 
 def make_shoot(turret_cord, pos, color_):
@@ -28,10 +28,17 @@ def turret(image_path):
     turret_x = X // 2
     turret_y = -300
     turret_cord = (turret_x, turret_y)
-    for x in range(0, X, 2):
-        for y in range(0, Y, 2):
+    for x in range(0, X // 2, 5):
+        for y in range(0,  Y // 2):
             if targets[x][y] != 0xffffff:
-                make_shoot(turret_cord, (x, y), targets[x][y])
+                make_shoot(turret_cord, (x, y), 
+                           targets[x][y])
+                make_shoot(turret_cord, (x + X // 2, y),
+                           targets[x + X // 2][y])
+                make_shoot(turret_cord, (x, y + Y // 2),
+                           targets[x][y + Y // 2])
+                make_shoot(turret_cord, (x + X // 2, y + Y),
+                           targets[x + X // 2][y + Y // 2])
 
 
 def main():

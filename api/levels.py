@@ -83,3 +83,5 @@ def finish_current_level():
     if ans.status_code == 200:
         ans = json.loads(ans.text)
     return ans
+
+print(get_current_level_info())

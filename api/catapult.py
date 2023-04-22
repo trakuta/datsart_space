@@ -34,7 +34,6 @@ def shoot(power: str, colors: dict, angleHorizontal=0, angleVertical=45):
     body = f"{body}{''.join(body_colors)}"
 
     headers['Content-Length'] = str(len(body))
-    print(body)
     ans = requests.post(url, headers=headers, data=body)
     if ans.status_code == 200:
         ans = json.loads(ans.text)
