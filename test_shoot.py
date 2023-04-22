@@ -28,15 +28,15 @@ def turret(image_path):
     turret_x = X // 2
     turret_y = -300
     turret_cord = (turret_x, turret_y)
-    for x in range(X):
-        for y in range(Y):
+    for x in range(0, X, 2):
+        for y in range(0, Y, 2):
             if targets[x][y] != 0xffffff:
                 make_shoot(turret_cord, (x, y), targets[x][y])
 
 
 def main():
-    # turret('images/1.jpg')
-    make_shoot((124, -300), (200, 125), 0xE6B43E)
+    turret('images/1.jpg')
+    # make_shoot((124, -300), (50, 190), 0xE6B43E)
 
 
 if __name__ == '__main__':
