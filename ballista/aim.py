@@ -22,8 +22,8 @@ def ballista_distance(power):
 
 
 def ballista_velocity(dist, vert_angle=45):
-
-    angle_radians = vert_angle * pi / 180  # переводим в радианы
+    angle_radians = math.radians(vert_angle)
+    #angle_radians = vert_angle * pi / 180  # переводим в радианы
     v0 = math.sqrt((dist * g * k) / (math.sin(2 * angle_radians)))
 
     return v0
