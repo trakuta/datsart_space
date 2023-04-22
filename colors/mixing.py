@@ -1,6 +1,5 @@
 from api.depot import *
-from utils import 
-
+from ballista.utils import calc_dist
 
 def get_rgb(color):
     '''
@@ -32,24 +31,16 @@ def calculate_mixed_color(paints: dict):
     return (r << 16) ^ (g << 8) ^ b
 
 
-def hamming_dist(a, b) -> int:
-    dist = 0
-    while a or b:
-        dist += (a & 1) != (b & 1)
-        a >>= 1
-        b >>= 1
-    return dist
-
-
 def search_paint(target: int, colors: list):
     min_dist = 2 ** 100
     cur_color = 0
     for color in colors:
         color = int(color)
-        dist = dist(target, color)
+        dist = calc_dist(get_rgb(target), get_rgb(color))
         if dist < min_dist:
             cur_color = color
             min_dist = dist
+    print(dist)
     return cur_color
 
 
@@ -61,13 +52,15 @@ def get_missing_color(target_color: int, current_color: int,
     R_m = (colors_count + 1) * R_t - R_c * colors_count
     G_m = (colors_count + 1) * G_t - G_c * colors_count
     B_m = (colors_count + 1) * B_t - B_c * colors_count
+    '''
     print(R_t, G_t, B_t)
     print(R_c, G_c, B_c)
     print(R_m, G_m, B_m)
+    '''
 
     return (R_m << 16) ^ (G_m << 8) ^ (B_m)
 
-def mix_paints(target_color: int, max_mix=10):
+def mix_paints(target_color: int, max_mix=20):
     paints_list = get_all_paints_remains_list() 
     paints_list = paints_list['response']
     colors = list(sorted(paints_list.keys()))
@@ -79,7 +72,7 @@ def mix_paints(target_color: int, max_mix=10):
         if cur_color == target_color:
             return paints
 
-        cur_target = get_missing_color(cur_target, cur_color, count)
+        cur_target = get_missing_color(target_color, cur_color, count)
         paint_color = search_paint(cur_target, colors)
         # Сохраняем выбранный цвет
         if paint_color not in paints:
@@ -88,10 +81,9 @@ def mix_paints(target_color: int, max_mix=10):
             paints[paint_color] += 1
 
         # Забираем красу со склада 
-        if paints_list[paint_color] == 1:
-            paints_list.pop(paint_color)
+        if paints_list[str(paint_color)] == 1:
+            paints_list.pop(str(paint_color))
             colors.pop(paint_color)
         else:
-            paints_list[paint_color] -= 1
-    print(hex(cur_color))
+            paints_list[str(paint_color)] -= 1
     return paints

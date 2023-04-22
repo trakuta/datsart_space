@@ -20,7 +20,6 @@ def get_tick():
     return ans
 
 
-
 def get_queue(id_):
     url = 'http://api.datsart.dats.team/art/state/queue'
     headers = {
@@ -39,4 +38,3 @@ def get_queue(id_):
     if ans.status_code == 200:
         ans = json.loads(ans.text)
     return ans
-
