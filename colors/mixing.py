@@ -1,4 +1,5 @@
 from api.depot import *
+from utils import 
 
 
 def get_rgb(color):
@@ -15,41 +16,82 @@ def calculate_mixed_color(paints: dict):
     '''
     Смешивание RGB цветов
     '''
+    if not paints:
+        return 0
     colors = 0
     r = g = b = 0
     for p in paints:
         colors += paints[p]
-        tmp = get_rgb(p)
-        r += tmp[0] * paint[p]
+        tmp = get_rgb(int(p))
+        r += tmp[0] * paints[p]
         g += tmp[1] * paints[p]
-        b += tmp[3] * paints[p]
-    r //= colors
-    g //= colors
-    b //= colors
+        b += tmp[2] * paints[p]
+    r = int(r / colors)
+    g = int(g / colors)
+    b = int(b / colors)
     return (r << 16) ^ (g << 8) ^ b
 
 
-def search_paint(target, arr: list):
-    l = 0
-    r = len(arr) - 1
-    while l <= r:
-        mid = (l + r) // 2
-        if arr[mid] > target:
-            r = mid - 1
-        elif arr[mid] < target:
-            l = mid + 1
-        else:
-            return arr[mid]
-    return arr[l]
+def hamming_dist(a, b) -> int:
+    dist = 0
+    while a or b:
+        dist += (a & 1) != (b & 1)
+        a >>= 1
+        b >>= 1
+    return dist
 
 
-def mix_paints(target_color, max_mix=5):
+def search_paint(target: int, colors: list):
+    min_dist = 2 ** 100
+    cur_color = 0
+    for color in colors:
+        color = int(color)
+        dist = dist(target, color)
+        if dist < min_dist:
+            cur_color = color
+            min_dist = dist
+    return cur_color
+
+
+def get_missing_color(target_color: int, current_color: int,
+                      colors_count: int):
+    R_t, G_t, B_t = get_rgb(target_color)
+    R_c, G_c, B_c = get_rgb(current_color)
+
+    R_m = (colors_count + 1) * R_t - R_c * colors_count
+    G_m = (colors_count + 1) * G_t - G_c * colors_count
+    B_m = (colors_count + 1) * B_t - B_c * colors_count
+    print(R_t, G_t, B_t)
+    print(R_c, G_c, B_c)
+    print(R_m, G_m, B_m)
+
+    return (R_m << 16) ^ (G_m << 8) ^ (B_m)
+
+def mix_paints(target_color: int, max_mix=10):
     paints_list = get_all_paints_remains_list() 
     paints_list = paints_list['response']
-    paints_list_keys = sorted(paints_list.keys())
+    colors = list(sorted(paints_list.keys()))
 
+    paints = dict()
     cur_target = target_color
-    cur_color = 0
-    print(len(paints_list_keys))
-    # for _ in range(max_mix):
+    for count in range(max_mix):
+        cur_color = calculate_mixed_color(paints)
+        if cur_color == target_color:
+            return paints
 
+        cur_target = get_missing_color(cur_target, cur_color, count)
+        paint_color = search_paint(cur_target, colors)
+        # Сохраняем выбранный цвет
+        if paint_color not in paints:
+            paints[paint_color] = 1
+        else:
+            paints[paint_color] += 1
+
+        # Забираем красу со склада 
+        if paints_list[paint_color] == 1:
+            paints_list.pop(paint_color)
+            colors.pop(paint_color)
+        else:
+            paints_list[paint_color] -= 1
+    print(hex(cur_color))
+    return paints

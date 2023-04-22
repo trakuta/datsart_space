@@ -17,9 +17,9 @@ def get_pixel_matrix(image_path):
             # получаем RGB-значение пикселя
             pixel = img.getpixel((x, y))
             # сохраняем его в матрицу
-            pixel_matrix[y][x] = pixel
+            r = pixel[0]
+            g = pixel[1]
+            b = pixel[2]
+            pixel_matrix[y][x] = (r << 16) ^ (g << 8) ^ b
 
     return pixel_matrix
-
-
-
