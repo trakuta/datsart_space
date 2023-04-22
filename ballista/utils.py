@@ -22,6 +22,9 @@ def horizontal_angl(canon: tuple, aim: tuple):
         return -angl_degr
 
 
-if __name__ == 'main':
+if __name__ == '__main__':
+    '''
     print(calc_dist((0, 0), (2, 1)))
     cos = (0 * 2 + 0 * 1) / calc_dist
+    '''
+    print(horizontal_angl((125, -300), (100, 200)))
