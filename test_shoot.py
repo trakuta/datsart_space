@@ -36,7 +36,7 @@ def turret(image_path):
 
 def main():
     # turret('images/1.jpg')
-    make_shoot((124, -300), (140, 200), 0xE6B43E)
+    make_shoot((124, -300), (200, 125), 0xE6B43E)
 
 
 if __name__ == '__main__':
