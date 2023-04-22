@@ -5,6 +5,10 @@ from ballista.aim import ballista_velocity, ballista_power
 from ballista.utils import calc_dist
 from colors.mixing import mix_paints
 from picture.picture import get_pixel_matrix
+from api.catapult import post_req
+import threading
+import requests
+import json
 
 
 def fire(p1, p2, m):
@@ -21,47 +25,41 @@ def make_shoot(turret_cord, pos, color_):
     shoot(power, color, hor_ang, 45)
  
 
-def turret(image_path):
+def turret(image_path, step):
     targets = get_pixel_matrix(image_path)
     X = len(targets)
     Y = len(targets[0])
     turret_x = X // 2
     turret_y = -300
     turret_cord = (turret_x, turret_y)
-    for x in range(0, X // 2, 5):
-        for y in range(0,  Y // 2):
+    for x in range(0, X, step):
+        for y in range(0,  Y, step):
             if targets[x][y] != 0xffffff:
                 make_shoot(turret_cord, (x, y),
                            targets[x][y])
-                make_shoot(turret_cord, (x + 1, y),
-                           targets[x + 1][y])
-                make_shoot(turret_cord, (x + 2, y),
-                           targets[x + 2][y])
 
-                make_shoot(turret_cord, (x + X // 2, y),
-                           targets[x + X // 2][y])
-                make_shoot(turret_cord, (x + 1 + X // 2, y),
-                           targets[x + 1 + X // 2][y])
-                make_shoot(turret_cord, (x + 1 + X // 2, y),
-                           targets[x + 2 + X // 2][y])
+def send_post():
+    while True:
+        while post_req.qsize() == 0:
+            pass
+        url, headers, body = post_req.get()
+        ans = requests.post(url, headers=headers, data=body)
+        if ans.status_code == 200:
+            print('+')
+            ans = json.loads(ans.text)
+        else:
+            print(ans.text)
+ 
 
-                make_shoot(turret_cord, (x, y + Y // 2),
-                           targets[x][y + Y // 2])
-                make_shoot(turret_cord, (x + 1, y + Y // 2),
-                           targets[x + 1][y + Y // 2])
-                make_shoot(turret_cord, (x + 2, y + Y // 2),
-                           targets[x + 2][y + Y // 2])
-
-
-                make_shoot(turret_cord, (x + X // 2, y + Y),
-                           targets[x + X // 2][y + Y // 2])
-                make_shoot(turret_cord, (x + 1 + X // 2, y + Y),
-                           targets[x + 1 + X // 2][y + Y // 2])
-                make_shoot(turret_cord, (x + 2 + X // 2, y + Y),
-                           targets[x + 2 + X // 2][y + Y // 2])
 
 def main():
-    turret('images/6.png')
+    for i in range(1, 21):
+        my_thread = threading.Thread(target=turret, args=('images/7.png', i))
+        my_thread.start()
+    for i in range(10):
+        my_thread = threading.Thread(target=send_post)
+        my_thread.start()
+    # turret('images/6.png')
     #finish_current_level()
     #print(get_next_level_info())
     #print(get_current_level_info())

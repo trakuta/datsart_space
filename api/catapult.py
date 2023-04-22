@@ -1,8 +1,11 @@
 import requests
 import json
+from queue import Queue
 
 
 token = '642fed5a96d7e642fed5a96d81'
+
+post_req = Queue()
 
 
 def shoot(power: str, colors: dict, angleHorizontal=0, angleVertical=45):
@@ -34,9 +37,13 @@ def shoot(power: str, colors: dict, angleHorizontal=0, angleVertical=45):
     body = f"{body}{''.join(body_colors)}"
 
     headers['Content-Length'] = str(len(body))
+    item = (url, headers, body)
+    post_req.put(item)
+    """
     ans = requests.post(url, headers=headers, data=body)
     if ans.status_code == 200:
         ans = json.loads(ans.text)
     else:
         print(ans.text)
     return ans
+    """
