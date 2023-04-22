@@ -82,7 +82,7 @@ def mix_paints(target_color: int, max_mix=20):
         # Забираем красу со склада 
         if paints_list[str(paint_color)] == 1:
             paints_list.pop(str(paint_color))
-            colors.pop(paint_color)
+            colors.remove(str(paint_color))
         else:
             paints_list[str(paint_color)] -= 1
     return paints

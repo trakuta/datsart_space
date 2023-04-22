@@ -30,7 +30,7 @@ def ballista_velocity(dist, vert_angle=45):
 
 
 def ballista_power(mass):
-    return mass * ballista_velocity()
+    return (mass * ballista_velocity() ** 2) / 2
 
 
 def find_initial_velocity(distance, angle):
