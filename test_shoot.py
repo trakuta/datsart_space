@@ -4,12 +4,22 @@ from ballista.utils import horizontal_angl
 from ballista.aim import ballista_velocity, ballista_power
 from ballista.utils import calc_dist
 from colors.mixing import mix_paints
+from picture.picture import get_pixel_matrix
 
 
-def fire(p1, p2):
+def fire(p1, p2, m):
     dist = calc_dist(p1, p2)
-    velocity = ballista_power(dist)
-    return int(velocity)
+    v = ballista_velocity(dist)
+    p = m * v ** 2 / 2
+    return int(p)
+
+def make_shoot(turret_cord, pos, color_):
+    color = mix_paints(color_, 10)
+    m = sum([color[k] for k in color])
+    power = fire(turret_cord, pos, m)
+    hor_ang = horizontal_angl(turret_cord, pos)
+    shoot(power, color, hor_ang, 45)
+ 
 
 def turret(image_path):
     targets = get_pixel_matrix(image_path)
@@ -20,24 +30,13 @@ def turret(image_path):
     turret_cord = (turret_x, turret_y)
     for x in range(X):
         for y in range(Y):
-            if targets[x][y] ! = 0xffffff:
-                power = fire(turret_y, (x, y))
-                hor_ang = horizontal_angl(turret_cord, (x, y))
-                color = targets[x][y] 
-                shoot(power, color, hor_ang, 45)
-
-
-
+            if targets[x][y] != 0xffffff:
+                make_shoot(turret_cord, (x, y), targets[x][y])
 
 
 def main():
-
-    power = fire((124, -300), (200, 200))
-    hor_ang = horizontal_angl((124, -300), (200, 200))
-    color = mix_paints(0xE6B43E, 10)
-    shoot(power, color, hor_ang, 45)
-    print(color)
-    print(get_current_level_info())
+    # turret('images/1.jpg')
+    make_shoot((124, -300), (140, 200), 0xE6B43E)
 
 
 if __name__ == '__main__':
