@@ -17,9 +17,9 @@ def horizontal_angl(canon: tuple, aim: tuple):
     angl_degr = math.degrees(angle_rad)
 
     if canon[0] > aim[0]:
-        return angl_degr
-    elif canon[0] < aim[0]:
         return -angl_degr
+    elif canon[0] < aim[0]:
+        return angl_degr
 
 
 if __name__ == '__main__':
